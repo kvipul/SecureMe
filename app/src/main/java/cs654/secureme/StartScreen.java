@@ -1,5 +1,6 @@
 package cs654.secureme;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
@@ -16,6 +17,7 @@ public class StartScreen extends ActionBarActivity {
     EditText fname,lname,yourMobile,helpMobile;
     Button submit;
     SharedPreferences sharedPreferences;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +43,14 @@ public class StartScreen extends ActionBarActivity {
                 editor.putString("yourMobile", yMobile);
                 editor.putString("helpMobile", hMobile);
                 editor.commit();
+
+                intent = new Intent(StartScreen.this,MainScreen.class);
+                startActivity(intent);
             }
         });
+
+        sharedPreferences = getSharedPreferences("fname", Context.MODE_PRIVATE);
+        checkDetails();
 
 
 
@@ -50,7 +58,7 @@ public class StartScreen extends ActionBarActivity {
 
     public void checkDetails(){
         if(sharedPreferences.contains("fname") && sharedPreferences.contains("lname") && sharedPreferences.contains("yourMobile") && sharedPreferences.contains("helpMobile")){
-            Intent intent = new Intent(this,MainScreen.class);
+            intent = new Intent(this,MainScreen.class);
             startActivity(intent);
         }
     }

@@ -35,6 +35,20 @@
             android:label="@string/title_activity_main_screen" >
         </activity>
 
+        <receiver
+            android:name=".StartScreen$DeviceAdminM"
+            android:description="@string/hello_blank_fragment"
+            android:label="Device Lock Feature"
+            android:permission="android.permission.BIND_DEVICE_ADMIN" >
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/devadmin" />
+
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

@@ -1,5 +1,8 @@
 package cs654.secureme;
 
+import android.app.admin.DeviceAdminReceiver;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,10 +17,11 @@ import android.widget.EditText;
 
 public class StartScreen extends ActionBarActivity {
 
-    EditText fname,lname,yourMobile,helpMobile;
-    Button submit;
+    EditText fname, lname, yourMobile, helpMobile;
+    Button submit, devAdmin;
     SharedPreferences sharedPreferences;
     Intent intent;
+    DevicePolicyManager mDPM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,7 @@ public class StartScreen extends ActionBarActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String firstName = fname.getText().toString();
                 String lastName = lname.getText().toString();
                 String yMobile = yourMobile.getText().toString();
@@ -44,8 +49,34 @@ public class StartScreen extends ActionBarActivity {
                 editor.putString("helpMobile", hMobile);
                 editor.commit();
 
-                intent = new Intent(StartScreen.this,MainScreen.class);
-                startActivity(intent);
+                DevicePolicyManager mDPM = (DevicePolicyManager)getSystemService(Context.DEVICE_POLICY_SERVICE);;
+                ComponentName mAdminName = new ComponentName(StartScreen.this, DeviceAdminM.class);
+                if (!mDPM.isAdminActive(mAdminName)) {
+                    devAdmin.setVisibility(View.VISIBLE);
+                } else {
+                    intent = new Intent(StartScreen.this, MainScreen.class);
+                    startActivity(intent);
+                    finish();
+                }
+
+
+            }
+        });
+
+
+        devAdmin = (Button) findViewById(R.id.devAd);
+        devAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Enable device admin
+                ComponentName mAdminName = new ComponentName(StartScreen.this, DeviceAdminM.class);
+
+                Intent intent1 = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                intent1.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, mAdminName);
+                intent1.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+                        "Please restart the app after activating this feature");
+                startActivityForResult(intent1, 0);
+                //
             }
         });
 
@@ -53,15 +84,15 @@ public class StartScreen extends ActionBarActivity {
         checkDetails();
 
 
-
     }
 
-    public void checkDetails(){
-        if(sharedPreferences.contains("fname") && sharedPreferences.contains("lname") && sharedPreferences.contains("yourMobile") && sharedPreferences.contains("helpMobile")){
-            intent = new Intent(this,MainScreen.class);
+    public void checkDetails() {
+        if (sharedPreferences.contains("fname") && sharedPreferences.contains("lname") && sharedPreferences.contains("yourMobile") && sharedPreferences.contains("helpMobile")) {
+            intent = new Intent(this, MainScreen.class);
             startActivity(intent);
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -82,6 +113,35 @@ public class StartScreen extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public class DeviceAdminM extends DeviceAdminReceiver {
+
+        void showToast(Context context, String msg) {
+//            String status = context.getString(R.string.admin_receiver_status, msg);
+//            Toast.makeText(context, status, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onEnabled(Context context, Intent intent) {
+//            showToast(context, context.getString(R.string.admin_receiver_status_enabled));
+        }
+
+        @Override
+        public CharSequence onDisableRequested(Context context, Intent intent) {
+            return context.getString(R.string.hello_blank_fragment);
+        }
+
+        @Override
+        public void onDisabled(Context context, Intent intent) {
+            showToast(context, context.getString(R.string.hello_blank_fragment));
+        }
+
+        @Override
+        public void onPasswordChanged(Context context, Intent intent) {
+            showToast(context, context.getString(R.string.hello_blank_fragment));
+        }
+
     }
 
 }

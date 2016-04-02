@@ -1,15 +1,23 @@
 package cs654.secureme;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 
 public class F3 extends android.support.v4.app.Fragment {
+
+    MapView mapView;
+    private GoogleMap mMap;
 
     View fragmentRootView;
     public F3(){
@@ -21,6 +29,25 @@ public class F3 extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         fragmentRootView =  inflater.inflate(R.layout.fragment_f3, container, false);
+
+        mapView = (MapView) fragmentRootView.findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+
+        mapView.onResume();// needed to get the map to display immediately
+
+        try {
+            MapsInitializer.initialize(getActivity().getApplicationContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        mMap = mapView.getMap();
+        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        mMap.setMyLocationEnabled(true);
+        mMap.setTrafficEnabled(true);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(26.5122135,80.2371741)).title("hi"));
+
 
         return fragmentRootView;
     }

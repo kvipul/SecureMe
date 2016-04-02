@@ -9,5 +9,10 @@
 
     <TextView android:text="main" android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/b1"
+        android:text="test only"/>
 
 </RelativeLayout>

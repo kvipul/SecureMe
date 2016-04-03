@@ -1,6 +1,12 @@
 package cs654.secureme;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,13 +17,22 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 
-public class F1 extends android.support.v4.app.Fragment {
+public class F1 extends android.support.v4.app.Fragment{
 
     View fragmentRootView;
     Button b1;
     public F1(){
 
     }
+
+
+//    private Activity mActivity;
+//
+//    @Override
+//    public void onAttach(Activity activity) {
+//        super.onAttach(activity);
+//        mActivity = activity;
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,8 +47,11 @@ public class F1 extends android.support.v4.app.Fragment {
             }
         });
 
+
+
         return fragmentRootView;
     }
+
 }
 
 //package cs654.secureme;

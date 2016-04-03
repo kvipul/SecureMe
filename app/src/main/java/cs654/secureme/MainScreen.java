@@ -1,5 +1,11 @@
 package cs654.secureme;
 
+import android.content.Context;
+import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -8,14 +14,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainScreen extends ActionBarActivity {
+public class MainScreen extends ActionBarActivity implements SensorEventListener {
 
     private SlidingTabLayout mSlidingTabLayout;
     MainScreenPagerAdapter mainActivityPagerAdapter;
     ViewPager mViewPager;
     private CharSequence[] tabTitles = {"Main", "Track", "Map"};
     private Toolbar toolbar;
-    private int nTabs=3;
+    private int nTabs = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +29,10 @@ public class MainScreen extends ActionBarActivity {
         setContentView(R.layout.activity_main_screen);
 
         createTabbedView();
+
+        SensorManager sm = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        Sensor s = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sm.registerListener(MainScreen.this, s, SensorManager.SENSOR_DELAY_FASTEST);
 
     }
 
@@ -50,7 +60,7 @@ public class MainScreen extends ActionBarActivity {
 
     private void createViewPager() {
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
-        mainActivityPagerAdapter =  new MainScreenPagerAdapter(getSupportFragmentManager(), tabTitles, nTabs);
+        mainActivityPagerAdapter = new MainScreenPagerAdapter(getSupportFragmentManager(), tabTitles, nTabs);
 
         // Assigning ViewPager View and setting the adapter
         mViewPager = (ViewPager) findViewById(R.id.view_pager_activity_main);
@@ -78,4 +88,35 @@ public class MainScreen extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        this.finish();
+//    }
+
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        event.values[0] = event.values[0] / 2;
+        event.values[1] = event.values[1] / 2;
+        event.values[2] = event.values[2] / 2;
+        if (event.values[0] > 8) {
+            try {
+//                this.finish();
+                startActivity(new Intent(MainScreen.this, SendSMSAccident.class));
+//                this.onDestroy();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+
 }

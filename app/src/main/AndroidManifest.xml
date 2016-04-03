@@ -6,8 +6,11 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-    <permission android:name="cs654.secureme.permission.MAPS_RECEIVE"
+
+    <permission
+        android:name="cs654.secureme.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="cs654.secureme.permission.MAPS_RECEIVE" />
     <!--
  The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -59,6 +62,11 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" >
+        </activity>
+        <activity
+            android:name=".SendSMSAccident"
+            android:label="@string/title_activity_send_smsaccident"
+            android:launchMode="singleInstance">
         </activity>
     </application>
 

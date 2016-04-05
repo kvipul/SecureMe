@@ -3,6 +3,7 @@ package cs654.secureme;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.Camera;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -24,6 +25,10 @@ public class F1 extends android.support.v4.app.Fragment{
     Button saveLocation;
     Button stopSavingLocation;
     public static Boolean saveStopLocation = true;
+    Button flash;
+    int toggleFlash=0;
+    static Camera cam = null;
+
     public F1(){
 
     }
@@ -62,6 +67,34 @@ public class F1 extends android.support.v4.app.Fragment{
             @Override
             public void onClick(View v) {
                 saveStopLocation = false;
+            }
+        });
+
+        flash = (Button) fragmentRootView.findViewById(R.id.flashLight);
+        flash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(toggleFlash==0) {
+                    cam = Camera.open();
+                    Camera.Parameters p = cam.getParameters();
+                    p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                    cam.setParameters(p);
+                    cam.startPreview();
+//                    cam.release();
+                    toggleFlash=1;
+                    flash.setText("Flashlight OFF");
+                }
+                else{
+                    cam.release();
+                    cam = Camera.open();
+                    Camera.Parameters p = cam.getParameters();
+                    p.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                    cam.setParameters(p);
+                    cam.stopPreview();
+                    cam.release();
+                    toggleFlash=0;
+                    flash.setText("FlashLight ON");
+                }
             }
         });
 

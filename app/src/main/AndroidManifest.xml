@@ -38,6 +38,8 @@
             android:label="@string/title_activity_main_screen" >
         </activity>
 
+        <service android:name=".SaveLocationOnDemand"/>
+
         <receiver
             android:name=".StartScreen$DeviceAdminM"
             android:description="@string/hello_blank_fragment"

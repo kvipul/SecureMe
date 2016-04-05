@@ -21,6 +21,9 @@ public class F1 extends android.support.v4.app.Fragment{
 
     View fragmentRootView;
     Button b1;
+    Button saveLocation;
+    Button stopSavingLocation;
+    public static Boolean saveStopLocation = true;
     public F1(){
 
     }
@@ -46,7 +49,21 @@ public class F1 extends android.support.v4.app.Fragment{
                 startActivity(new Intent(getActivity(),MapsActivity.class));
             }
         });
-
+        saveLocation = (Button) fragmentRootView.findViewById(R.id.saveMyLocation);
+        saveLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveStopLocation = true;
+                getActivity().startService(new Intent(getActivity(), SaveLocationOnDemand.class));
+            }
+        });
+        stopSavingLocation = (Button) fragmentRootView.findViewById(R.id.stopSavingMyLocation);
+        stopSavingLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveStopLocation = false;
+            }
+        });
 
 
         return fragmentRootView;

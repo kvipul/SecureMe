@@ -43,6 +43,7 @@
 
         <service android:name=".SaveLocationOnDemand"/>
         <service android:name=".SendMyTracking"/>
+        <service android:name=".DisableDriving"/>
 
         <receiver
             android:name=".StartScreen$DeviceAdminM"

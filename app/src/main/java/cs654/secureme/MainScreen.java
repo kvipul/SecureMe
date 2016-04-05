@@ -34,6 +34,8 @@ public class MainScreen extends ActionBarActivity implements SensorEventListener
         Sensor s = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sm.registerListener(MainScreen.this, s, SensorManager.SENSOR_DELAY_FASTEST);
 
+        startService(new Intent(MainScreen.this,DisableDriving.class));
+
     }
 
     private void createTabbedView() {

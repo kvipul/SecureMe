@@ -7,7 +7,21 @@
     tools:context="cs654.secureme.F2"
     android:id="@+id/f2">
 
-    <TextView android:text="track" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send My Tracking"
+        android:id="@+id/sendMyTracking"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop"
+        android:id="@+id/stopMyTracking"
+        android:layout_alignBottom="@+id/sendMyTracking"
+        android:layout_toRightOf="@+id/sendMyTracking"
+        android:layout_toEndOf="@+id/sendMyTracking" />
 </RelativeLayout>

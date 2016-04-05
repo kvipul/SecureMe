@@ -1,5 +1,6 @@
 package cs654.secureme;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,11 +8,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 
 public class F2 extends android.support.v4.app.Fragment {
 
+
     View fragmentRootView;
+    Button sendTracking;
+    Button stopTracking;
+    public static Boolean sendMyTrack = false;
     public F2(){
 
     }
@@ -21,6 +27,21 @@ public class F2 extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         fragmentRootView =  inflater.inflate(R.layout.fragment_f2, container, false);
+        sendTracking = (Button) fragmentRootView.findViewById(R.id.sendMyTracking);
+        sendTracking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMyTrack = true;
+                getActivity().startService(new Intent(getActivity(),SendMyTracking.class));
+            }
+        });
+        stopTracking = (Button) fragmentRootView.findViewById(R.id.stopMyTracking);
+        stopTracking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMyTrack = false;
+            }
+        });
 
         return fragmentRootView;
     }

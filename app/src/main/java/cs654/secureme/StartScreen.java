@@ -41,7 +41,7 @@ public class StartScreen extends ActionBarActivity {
                 String lastName = lname.getText().toString();
                 String yMobile = yourMobile.getText().toString();
                 String hMobile = helpMobile.getText().toString();
-
+                sharedPreferences = getSharedPreferences("details", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("fname", firstName);
                 editor.putString("lname", lastName);
@@ -80,7 +80,7 @@ public class StartScreen extends ActionBarActivity {
             }
         });
 
-        sharedPreferences = getSharedPreferences("fname", Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("details", Context.MODE_PRIVATE);
         checkDetails();
 
 

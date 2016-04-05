@@ -23,7 +23,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".StartScreen"
             android:label="@string/app_name" >
@@ -39,6 +39,7 @@
         </activity>
 
         <service android:name=".SaveLocationOnDemand"/>
+        <service android:name=".SendMyTracking"/>
 
         <receiver
             android:name=".StartScreen$DeviceAdminM"

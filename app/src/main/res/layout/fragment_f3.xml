@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="See on Map"
+        android:id="@+id/receiveTracking" />
 <com.google.android.gms.maps.MapView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/mapView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent"
+    android:layout_below="@+id/receiveTracking" />
+</RelativeLayout>
+
     <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
     <!--xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"-->
     <!--android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"-->

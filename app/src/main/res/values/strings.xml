@@ -9,4 +9,6 @@
     <string name="title_activity_main_screen">Secure Me</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_send_smsaccident">SendSMSAccident</string>
+    <string name="accessibility_service_description">This service records pop ups sent by your mobile operator, and saves them in XXXX App. It is absolutely safe to use.</string>
+
 </resources>

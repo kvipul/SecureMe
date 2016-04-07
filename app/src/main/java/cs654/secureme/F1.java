@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 
 public class F1 extends android.support.v4.app.Fragment{
@@ -28,6 +29,8 @@ public class F1 extends android.support.v4.app.Fragment{
     Button flash;
     int toggleFlash=0;
     static Camera cam = null;
+    public static TextView txt;
+    public static TextView balance;
 
     public F1(){
 
@@ -46,6 +49,7 @@ public class F1 extends android.support.v4.app.Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         fragmentRootView =  inflater.inflate(R.layout.fragment_f1, container, false);
         b1=(Button)fragmentRootView.findViewById(R.id.b1);
         b1.setOnClickListener(new View.OnClickListener() {
@@ -98,7 +102,8 @@ public class F1 extends android.support.v4.app.Fragment{
             }
         });
 
-
+        txt=(TextView)fragmentRootView.findViewById(R.id.text);
+        balance=(TextView)fragmentRootView.findViewById(R.id.balanceDisp);
         return fragmentRootView;
     }
 

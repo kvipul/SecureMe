@@ -2,16 +2,20 @@ package cs654.secureme;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 public class MainScreen extends ActionBarActivity implements SensorEventListener {
@@ -34,7 +38,23 @@ public class MainScreen extends ActionBarActivity implements SensorEventListener
         Sensor s = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sm.registerListener(MainScreen.this, s, SensorManager.SENSOR_DELAY_FASTEST);
 
-        startService(new Intent(MainScreen.this,DisableDriving.class));
+        startService(new Intent(MainScreen.this, DisableDriving.class));
+
+        //check airplane mode and wifi mode when they trun on
+        MyReceiver wifiReciever = new MyReceiver(this);
+        IntentFilter intentfilter =new IntentFilter();
+        intentfilter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION);
+        intentfilter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+        registerReceiver(wifiReciever, intentfilter);
+
+        //ussd
+
+        startService(new Intent(this, USSDService.class));
+        MyReceiver ussdcall=new MyReceiver(this);
+        registerReceiver(ussdcall, new IntentFilter("com.times.ussd.action.REFRESH"));
+        dailNumber("123");
+        Toast.makeText(MainScreen.this,"Please wait checking balance",Toast.LENGTH_SHORT).show();
+
 
     }
 
@@ -118,6 +138,11 @@ public class MainScreen extends ActionBarActivity implements SensorEventListener
             }
         }
 
+    }
+
+    private void dailNumber(String code) {
+        String ussdCode = "*" + code + Uri.encode("#");
+        startActivity(new Intent("android.intent.action.CALL", Uri.parse("tel:" + ussdCode)));
     }
 
 

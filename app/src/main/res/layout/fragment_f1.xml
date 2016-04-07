@@ -7,8 +7,6 @@
     tools:context="cs654.secureme.F1"
     android:id="@+id/f1">
 
-    <TextView android:text="main" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,5 +39,24 @@
         android:layout_below="@+id/saveMyLocation"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/text"
+        android:layout_below="@+id/flashLight"
+        android:textSize="25sp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Balance"
+        android:id="@+id/balanceDisp"
+        android:layout_below="@+id/text"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="25sp"/>
 
 </RelativeLayout>

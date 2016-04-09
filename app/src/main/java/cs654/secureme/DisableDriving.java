@@ -20,6 +20,7 @@ public class DisableDriving extends Service {
     double long1, long2;
     double tempLat, tempLong;
     GPS gps;
+    int tempVar=0;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -43,10 +44,15 @@ public class DisableDriving extends Service {
 
                         lat1 = gps.getLatitude();
                         long1 = gps.getLongitude();
+                        System.out.println("ll1" + tempVar);
+
                         Thread.sleep(1000);
 
                         lat2 = gps.getLatitude();
                         long2 = gps.getLongitude();
+                        System.out.println("ll1" + tempVar);
+                        ++tempVar;
+
 
                         tempLat = toRad(lat2 - lat1);
                         tempLong = toRad(long2 - long1);
@@ -54,7 +60,6 @@ public class DisableDriving extends Service {
                         double x = Math.sin(tempLat / 2) * Math.sin(tempLat / 2) + Math.sin(tempLong / 2) * Math.sin(tempLong / 2) * Math.cos(toRad(lat1)) * Math.cos(toRad(lat2));
                         double y = 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
                         double xy = 6371 * y;
-                        System.out.println("ll1" + xy + "xy");
                         double speed = xy * 1000;
 //                        speed = 100;
                         if (speed >= 100) {

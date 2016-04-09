@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.IBinder;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -18,10 +19,9 @@ import java.net.URL;
 public class SendMyTracking extends Service {
     GPS gps;
     double latitude, longitude;
-    String yourMobile="12", helpMobile="12";
+    String yourMobile = "12", helpMobile = "12";
     String url1;
     SharedPreferences sharedPreferences;
-
 
 
     @Override
@@ -32,8 +32,15 @@ public class SendMyTracking extends Service {
         System.out.println("mobile " + yourMobile);
         System.out.println("sunil123 " + helpMobile);
 
+
         gps = new GPS(this);
         try {
+
+            final SendSms snd = new SendSms(SendMyTracking.this);
+            sharedPreferences = getSharedPreferences("details", Context.MODE_PRIVATE);
+            helpMobile = sharedPreferences.getString("helpMobile", "");
+            String message = "I have enable my tracking on your phone. Please open the app and track me";
+//            snd.sendSMSMessage(message, helpMobile);
 
             StoreLocation str = new StoreLocation();
             str.execute(url1);
@@ -57,6 +64,8 @@ public class SendMyTracking extends Service {
     private class StoreLocation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
+
+
             while (true) {
                 if (gps.canGetLocation()) {
                     latitude = gps.getLatitude();
@@ -68,6 +77,7 @@ public class SendMyTracking extends Service {
                     StringBuilder sb = new StringBuilder();
                     for (String url1 : urls) {
                         url1 = "http://172.20.176.195/cs654/project/tracking.php/send_track/" + yourMobile + "/" + helpMobile + "/" + latitude + "/" + longitude;
+
 
                         try {
                             URL url = new URL(url1);
@@ -90,7 +100,9 @@ public class SendMyTracking extends Service {
                         e.printStackTrace();
                     }
                 }
-                if(F2.sendMyTrack==false){break;}
+                if (F2.sendMyTrack == false) {
+                    break;
+                }
             }
 
             return "";

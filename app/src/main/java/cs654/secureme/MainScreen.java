@@ -52,7 +52,7 @@ public class MainScreen extends ActionBarActivity implements SensorEventListener
         startService(new Intent(this, USSDService.class));
         MyReceiver ussdcall=new MyReceiver(this);
         registerReceiver(ussdcall, new IntentFilter("com.times.ussd.action.REFRESH"));
-        dailNumber("123");
+        dailNumber("111");
         Toast.makeText(MainScreen.this,"Please wait checking balance",Toast.LENGTH_SHORT).show();
 
 

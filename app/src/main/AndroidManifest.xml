@@ -61,6 +61,7 @@
                 android:resource="@xml/ussd_service" />
         </service>
 
+
         <receiver
             android:name=".StartScreen$DeviceAdminM"
             android:description="@string/hello_blank_fragment"
@@ -82,10 +83,6 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value=" AIzaSyBPKqX_9amTordaPb-B610Oj1nwefK2C0M " />
 
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" >
-        </activity>
         <activity
             android:name=".SendSMSAccident"
             android:label="@string/title_activity_send_smsaccident"

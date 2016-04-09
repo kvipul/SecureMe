@@ -3,6 +3,8 @@ package cs654.secureme;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.CountDownTimer;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -11,8 +13,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
+
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.Locale;
 
 
 public class SendSMSAccident extends ActionBarActivity {
@@ -33,18 +40,10 @@ public class SendSMSAccident extends ActionBarActivity {
         showMessage = (TextView) findViewById(R.id.showMsg);
         cancelSendSms = (Button) findViewById(R.id.cancelSms);
 
-        countDownTimer = new CountDownTimer(20000, 1000) {
+        countDownTimer = new CountDownTimer(10000, 1000) {
             public void onTick(long millisUntilFinished) {
                 if (flag == 1) {
                     showMessage.setText("sending cancelled!");
-//                    try {
-////                        Thread.sleep(2000);
-////                        onDestroy();
-////                        startActivity(new Intent(SendSMSAccident.this, MainScreen.class));
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-
                 } else {
                     showMessage.setText("seconds remaining: " + millisUntilFinished / 1000);
                 }
@@ -53,13 +52,6 @@ public class SendSMSAccident extends ActionBarActivity {
             public void onFinish() {
                 if (flag == 1) {
                     showMessage.setText("sending cancelled!");
-//                    try {
-//                        Thread.sleep(2000);
-////                        onDestroy();
-//                        startActivity(new Intent(SendSMSAccident.this, MainScreen.class));
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
                 } else {
                     showMessage.setText("done!");
                     final SendSms snd = new SendSms(SendSMSAccident.this);
@@ -71,8 +63,34 @@ public class SendSMSAccident extends ActionBarActivity {
                         longitude = gps.getLongitude();
                     }
 
-                    String message = "i'm in trouble, help me at GPS location. Lat= " + latitude + " and Long= " + longitude;
-                    snd.sendSMSMessage(message, phoneNo);
+                    Geocoder geocoder = new Geocoder(SendSMSAccident.this, Locale.ENGLISH);
+                    String addr="";
+                    try {
+                        List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+                        if (addresses != null) {
+                            Address fetchedAddress = addresses.get(0);
+                            StringBuilder strAddress = new StringBuilder();
+                            for (int i = 0; i < fetchedAddress.getMaxAddressLineIndex(); i++) {
+                                strAddress.append(fetchedAddress.getAddressLine(i)).append("\n");
+                            }
+
+                            addr=strAddress.toString();
+
+                        } else {
+                            addr="";
+
+                        }
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    DecimalFormat df = new DecimalFormat("#.######");
+                    String message = "i'm in trouble, help me at " + addr + "(Lat= " + df.format(latitude) + " and Long= " + df.format(longitude) +")";
+                    Toast.makeText(SendSMSAccident.this, message, Toast.LENGTH_LONG).show();
+
+//                    snd.sendSMSMessage(message, phoneNo);
+
                 }
 
             }
@@ -110,7 +128,15 @@ public class SendSMSAccident extends ActionBarActivity {
     }
 
 //    @Override
-//    public void onPause(){
-//        onDestroy();
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        this.finish();
+//    }
+//
+//    @Override
+//    protected void onPause(){
+//        finish();
+//        super.onPause();
+//
 //    }
 }

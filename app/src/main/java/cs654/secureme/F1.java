@@ -22,7 +22,6 @@ import android.widget.TextView;
 public class F1 extends android.support.v4.app.Fragment{
 
     View fragmentRootView;
-    Button b1;
     Button saveLocation;
     Button stopSavingLocation;
     public static Boolean saveStopLocation = true;
@@ -51,13 +50,7 @@ public class F1 extends android.support.v4.app.Fragment{
         // Inflate the layout for this fragment
 
         fragmentRootView =  inflater.inflate(R.layout.fragment_f1, container, false);
-        b1=(Button)fragmentRootView.findViewById(R.id.b1);
-        b1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(),MapsActivity.class));
-            }
-        });
+
         saveLocation = (Button) fragmentRootView.findViewById(R.id.saveMyLocation);
         saveLocation.setOnClickListener(new View.OnClickListener() {
             @Override

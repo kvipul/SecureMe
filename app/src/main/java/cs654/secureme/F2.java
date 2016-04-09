@@ -1,6 +1,8 @@
 package cs654.secureme;
 
 import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -42,6 +44,39 @@ public class F2 extends android.support.v4.app.Fragment {
                 sendMyTrack = false;
             }
         });
+
+//        setDest = (Button) fragmentRootView.findViewById(R.id.setDestination);
+//        setDest.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                toggleElements=0;
+//                Intent i = new Intent(getActivity(),F3.class);
+//                startActivity(i);
+//
+//            }
+//        });
+//
+//        openTracking  = (Button)fragmentRootView.findViewById(R.id.otOther);
+//        openTracking.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                toggleElements=1;
+////                Intent i = new Intent(getActivity(),F3.class);
+////                startActivity(i);
+//
+//                Fragment newFragment = new F3();
+//                // consider using Java coding conventions (upper first char class names!!!)
+//                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//
+//                // Replace whatever is in the fragment_container view with this fragment,
+//                // and add the transaction to the back stack
+//                transaction.replace(R.id.fragment_container, newFragment);
+//                transaction.addToBackStack(null);
+//
+//                // Commit the transaction
+//                transaction.commit();
+//            }
+//        });
 
         return fragmentRootView;
     }

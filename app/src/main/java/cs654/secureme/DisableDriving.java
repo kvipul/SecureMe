@@ -5,7 +5,9 @@ import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.os.IBinder;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -46,7 +48,7 @@ public class DisableDriving extends Service {
                         long1 = gps.getLongitude();
                         System.out.println("ll1" + tempVar);
 
-                        Thread.sleep(1000);
+                        Thread.sleep(5000);
 
                         lat2 = gps.getLatitude();
                         long2 = gps.getLongitude();
@@ -54,13 +56,11 @@ public class DisableDriving extends Service {
                         ++tempVar;
 
 
-                        tempLat = toRad(lat2 - lat1);
-                        tempLong = toRad(long2 - long1);
 
-                        double x = Math.sin(tempLat / 2) * Math.sin(tempLat / 2) + Math.sin(tempLong / 2) * Math.sin(tempLong / 2) * Math.cos(toRad(lat1)) * Math.cos(toRad(lat2));
-                        double y = 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
-                        double xy = 6371 * y;
-                        double speed = xy * 1000;
+                        GetDistanceBetweenTwoPointsGPS getDistanceBetweenTwoPointsGPS = new GetDistanceBetweenTwoPointsGPS();
+                        double xy=getDistanceBetweenTwoPointsGPS.getDist(lat1,long1,lat2,long2);
+
+                        double speed = xy * 1;
 //                        speed = 100;
                         if (speed >= 100) {
                             DevicePolicyManager mDPM;
@@ -86,10 +86,6 @@ public class DisableDriving extends Service {
         }
     }
 
-
-    public double toRad(double x) {
-        return x * Math.PI / 180;
-    }
 
     @Override
     public IBinder onBind(Intent intent) {

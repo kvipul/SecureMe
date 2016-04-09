@@ -128,7 +128,7 @@ public class MainScreen extends ActionBarActivity implements SensorEventListener
         event.values[0] = event.values[0] / 2;
         event.values[1] = event.values[1] / 2;
         event.values[2] = event.values[2] / 2;
-        if (event.values[0] > 8) {
+        if (event.values[0] > 180) {
             try {
 //                this.finish();
                 startActivity(new Intent(MainScreen.this, SendSMSAccident.class));

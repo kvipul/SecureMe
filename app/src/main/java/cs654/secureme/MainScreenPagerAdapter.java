@@ -21,10 +21,15 @@ public class MainScreenPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public android.support.v4.app.Fragment getItem(int position) {
         switch (position) {
-            case 1: return new F2();
-            case 2: return new F3();
-//            case 3: return new F3();
-            default: return new F1();
+            case 0:
+                return new F1();
+
+            case 1:
+                return new F2();
+            case 2:
+                return new F3();
+            default:
+                return new F1();
         }
     }
 

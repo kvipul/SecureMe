@@ -1,18 +1,29 @@
 package cs654.secureme;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -32,6 +43,7 @@ public class F3 extends android.support.v4.app.Fragment {
     Button receiveTrack;
     View fragmentRootView;
     Marker marker;
+    Circle circle;
     SharedPreferences sharedPreferences;
     String yourMobile = "11", helpMobile;
     String url1;
@@ -40,6 +52,16 @@ public class F3 extends android.support.v4.app.Fragment {
     int counter = 0;
     float latCollection[];
     float longCollection[];
+
+    //to raise alarm
+    double lat1 = 0, lat2 = 0;
+    double long1 = 0, long2 = 0;
+    double xy;
+
+    int notificationFlag = 0;
+
+    Button setDest;
+    int setDestFlag = 0;//if 1 then set destination
 
     public F3() {
 
@@ -71,6 +93,14 @@ public class F3 extends android.support.v4.app.Fragment {
             }
         });
 
+        setDest = (Button) fragmentRootView.findViewById(R.id.setDestination);
+        setDest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setDestFlag = 1;
+            }
+        });
+
         mapView = (MapView) fragmentRootView.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
 
@@ -83,11 +113,73 @@ public class F3 extends android.support.v4.app.Fragment {
         }
 
         mMap = mapView.getMap();
-        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+//        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.setMyLocationEnabled(true);
         mMap.setTrafficEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
+
 //        marker = mMap.addMarker(new MarkerOptions().position(new LatLng(25.5122135, 80.2371741)).title("hi"));
+
+        //to mark my current location
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        String provider = locationManager.getBestProvider(criteria, true);
+        final Location myLocation = locationManager.getLastKnownLocation(provider);
+        final double latitude = myLocation.getLatitude();
+        final double longitude = myLocation.getLongitude();
+        final LatLng latLng = new LatLng(latitude, longitude);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+
+        //add marker on touch
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+//                Toast.makeText(getActivity(), latLng.latitude + " " + latLng.longitude, Toast.LENGTH_LONG).show();
+                if (setDestFlag == 1) {
+                    marker = mMap.addMarker(new MarkerOptions().position(new LatLng(latLng.latitude, latLng.longitude)).title("Your Destination"));
+                    lat1 = latLng.latitude;
+                    long1 = latLng.longitude;
+                }
+
+            }
+        });
+
+
+        mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+            @Override
+            public void onMyLocationChange(Location location) {
+                if (setDestFlag == 1) {
+
+                    GPS gps = new GPS(getActivity());
+                    if (gps.canGetLocation) {
+                        lat2 = gps.getLatitude();
+                        long2 = gps.getLongitude();
+                    }
+                    GetDistanceBetweenTwoPointsGPS getDistanceBetweenTwoPointsGPS = new GetDistanceBetweenTwoPointsGPS();
+                    xy = getDistanceBetweenTwoPointsGPS.getDist(lat1, long1, lat2, long2);
+                    Toast.makeText(getActivity(), "distance is " + xy, Toast.LENGTH_LONG).show();
+                    //Raise alarm when distance is less than 20metres
+                    if (xy < 20 && notificationFlag == 0) {
+                        //Define Notification Manager
+                        NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+//                  Define sound URI
+                        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+                        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getActivity()).setSound(soundUri); //This sets the sound to play
+                        //Display notification
+                        notificationManager.notify(0, mBuilder.build());
+                        try {
+                            Thread.sleep(2000);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        notificationManager.cancel(0);
+                        notificationFlag = 1;
+                    }
+                }
+            }
+        });
 
 
         return fragmentRootView;
@@ -145,6 +237,7 @@ public class F3 extends android.support.v4.app.Fragment {
             System.out.print("hi this" + result);
         }
     }
+
 
 //    @Override
 //    public void onStop() {

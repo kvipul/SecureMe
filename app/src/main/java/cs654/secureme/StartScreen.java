@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -49,7 +50,8 @@ public class StartScreen extends ActionBarActivity {
                 editor.putString("helpMobile", hMobile);
                 editor.commit();
 
-                DevicePolicyManager mDPM = (DevicePolicyManager)getSystemService(Context.DEVICE_POLICY_SERVICE);;
+                DevicePolicyManager mDPM = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+                ;
                 ComponentName mAdminName = new ComponentName(StartScreen.this, DeviceAdminM.class);
                 if (!mDPM.isAdminActive(mAdminName)) {
                     devAdmin.setVisibility(View.VISIBLE);
@@ -58,6 +60,10 @@ public class StartScreen extends ActionBarActivity {
                     startActivity(intent);
                     finish();
                 }
+
+                InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
 
             }

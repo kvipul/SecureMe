@@ -25,8 +25,6 @@ public class MainScreenPagerAdapter extends FragmentStatePagerAdapter {
                 return new F1();
 
             case 1:
-                return new F2();
-            case 2:
                 return new F3();
             default:
                 return new F1();

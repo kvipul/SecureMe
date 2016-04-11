@@ -11,10 +11,13 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +66,10 @@ public class F3 extends android.support.v4.app.Fragment {
     Button setDest;
     int setDestFlag = 0;//if 1 then set destination
 
+    //set the distance on which alarm should be raised
+    EditText distTB;
+    int distanceInM;
+
     public F3() {
 
     }
@@ -74,6 +81,7 @@ public class F3 extends android.support.v4.app.Fragment {
         fragmentRootView = inflater.inflate(R.layout.fragment_f3, container, false);
         latCollection = new float[10000];
         longCollection = new float[10000];
+
 
         receiveTrack = (Button) fragmentRootView.findViewById(R.id.receiveTracking);
         receiveTrack.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +96,8 @@ public class F3 extends android.support.v4.app.Fragment {
 
 
                 GetLocation getLocation = new GetLocation();
-                getLocation.execute(url1);
+//                getLocation.execute(url1);
+                getLocation.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url1);
 
             }
         });
@@ -98,6 +107,17 @@ public class F3 extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 setDestFlag = 1;
+                distTB = (EditText) fragmentRootView.findViewById(R.id.distanceTB);
+                String s = distTB.getText().toString();
+                try {
+                    distanceInM = Integer.parseInt(s);
+                    Log.d("distanceinm", "" + distanceInM);
+                } catch (NumberFormatException nfe) {
+                    System.out.println("Could not parse " + nfe);
+                }
+                InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             }
         });
 
@@ -121,14 +141,16 @@ public class F3 extends android.support.v4.app.Fragment {
 
 //        marker = mMap.addMarker(new MarkerOptions().position(new LatLng(25.5122135, 80.2371741)).title("hi"));
 
+        //Next few lines may cause errors. they were working fine till 9 april but started to give error on 10 april so changed them
         //to mark my current location
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         String provider = locationManager.getBestProvider(criteria, true);
         final Location myLocation = locationManager.getLastKnownLocation(provider);
-        final double latitude = myLocation.getLatitude();
-        final double longitude = myLocation.getLongitude();
-        final LatLng latLng = new LatLng(latitude, longitude);
+//        final double latitude = myLocation.getLatitude();
+//        final double longitude = myLocation.getLongitude();
+        GPS gpp = new GPS(getActivity());
+        final LatLng latLng = new LatLng(gpp.getLatitude(), gpp.getLongitude());
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
 
@@ -141,6 +163,8 @@ public class F3 extends android.support.v4.app.Fragment {
                     marker = mMap.addMarker(new MarkerOptions().position(new LatLng(latLng.latitude, latLng.longitude)).title("Your Destination"));
                     lat1 = latLng.latitude;
                     long1 = latLng.longitude;
+
+
                 }
 
             }
@@ -159,9 +183,9 @@ public class F3 extends android.support.v4.app.Fragment {
                     }
                     GetDistanceBetweenTwoPointsGPS getDistanceBetweenTwoPointsGPS = new GetDistanceBetweenTwoPointsGPS();
                     xy = getDistanceBetweenTwoPointsGPS.getDist(lat1, long1, lat2, long2);
-                    Toast.makeText(getActivity(), "distance is " + xy, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "distance is " + Math.round(xy), Toast.LENGTH_LONG).show();
                     //Raise alarm when distance is less than 20metres
-                    if (xy < 20 && notificationFlag == 0) {
+                    if (xy < (double) distanceInM && notificationFlag == 0) {
                         //Define Notification Manager
                         NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
 //                  Define sound URI
@@ -170,7 +194,7 @@ public class F3 extends android.support.v4.app.Fragment {
                         //Display notification
                         notificationManager.notify(0, mBuilder.build());
                         try {
-                            Thread.sleep(2000);
+                            Thread.sleep(5000);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -224,7 +248,7 @@ public class F3 extends android.support.v4.app.Fragment {
 
                         }
                     });
-                    Thread.sleep(5000);
+                    Thread.sleep(2000);
 
                 } catch (Exception e) {
                 }

@@ -1,9 +1,12 @@
 package cs654.secureme;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.IBinder;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -16,19 +19,25 @@ import java.net.URL;
 public class SaveLocationOnDemand extends Service {
 
     GPS gps;
-    double latitude, longitude;
-    String url1;
-
+    double latitude = 0, longitude = 0;
+    String url1 = "";
+    SharedPreferences sharedPreferences;
+    String yourMobile;
 
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         gps = new GPS(this);
         try {
+            Log.d("savelocationondemand", url1);
+
+            sharedPreferences = getSharedPreferences("details", Context.MODE_PRIVATE);
+            yourMobile = sharedPreferences.getString("yourMobile", "");
+            url1 = "http://172.20.176.195/cs654/project/save_location.php/" + yourMobile + "/" + latitude + "/" + longitude;
 
             StoreLocation str = new StoreLocation();
-            str.execute(url1);
-
+//            str.execute(url1);
+            str.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,url1);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -52,13 +61,12 @@ public class SaveLocationOnDemand extends Service {
                 if (gps.canGetLocation()) {
                     latitude = gps.getLatitude();
                     longitude = gps.getLongitude();
-                    System.out.println("sunil sunil " + latitude + " " + longitude);
-                    System.out.println("sunil sunil 2" + latitude + " " + longitude);
+                    Log.d("savelocationondemand", url1);
 
                     BufferedReader reader = null;
                     StringBuilder sb = new StringBuilder();
                     for (String url1 : urls) {
-                        url1 = "http://172.20.176.195/cs654/project/save_location.php/sunil/" + latitude + "/" + longitude;
+                        url1 = "http://172.20.176.195/cs654/project/save_location.php/" + yourMobile + "/" + latitude + "/" + longitude;
 
                         try {
                             URL url = new URL(url1);
@@ -81,7 +89,9 @@ public class SaveLocationOnDemand extends Service {
                         e.printStackTrace();
                     }
                 }
-                if(F1.saveStopLocation==false){break;}
+                if (F1.saveStopLocation == false) {
+                    break;
+                }
             }
 
             return "";

@@ -28,12 +28,11 @@ public class DisableDriving extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         Calc c = new Calc();
-        c.execute();
+        c.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         // If we get killed, after returning from here, restart
         return START_STICKY;
     }
 
-    //temp to check something
     private class Calc extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
@@ -48,7 +47,7 @@ public class DisableDriving extends Service {
                         long1 = gps.getLongitude();
                         System.out.println("ll1" + tempVar);
 
-                        Thread.sleep(5000);
+                        Thread.sleep(1000);
 
                         lat2 = gps.getLatitude();
                         long2 = gps.getLongitude();
@@ -69,7 +68,7 @@ public class DisableDriving extends Service {
                         } else {
 
                         }
-                        Thread.sleep(2000);
+                        Thread.sleep(1000);
 
                     } else
                         gps.showSettingsAlert();

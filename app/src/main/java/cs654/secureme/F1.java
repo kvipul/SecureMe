@@ -30,6 +30,9 @@ public class F1 extends android.support.v4.app.Fragment{
     static Camera cam = null;
     public static TextView txt;
     public static TextView balance;
+    Button sendTracking;
+    Button stopTracking;
+    public static Boolean sendMyTrack = true;
 
     public F1(){
 
@@ -97,6 +100,22 @@ public class F1 extends android.support.v4.app.Fragment{
 
         txt=(TextView)fragmentRootView.findViewById(R.id.text);
         balance=(TextView)fragmentRootView.findViewById(R.id.balanceDisp);
+
+        sendTracking = (Button) fragmentRootView.findViewById(R.id.sendMyTracking);
+        sendTracking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMyTrack = true;
+                getActivity().startService(new Intent(getActivity(),SendMyTracking.class));
+            }
+        });
+        stopTracking = (Button) fragmentRootView.findViewById(R.id.stopMyTracking);
+        stopTracking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMyTrack = false;
+            }
+        });
         return fragmentRootView;
     }
 

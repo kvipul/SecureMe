@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cs654.secureme" >
+    package="cs654.secureme">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -20,11 +20,12 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" />
 
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
-    <uses-permission android:name="ANDROID.PERMISSION.WRITE_SECURE_SETTINGS"/>
+    <uses-permission android:name="ANDROID.PERMISSION.WRITE_SECURE_SETTINGS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
@@ -36,7 +37,9 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".StartScreen"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,18 +49,20 @@
         <activity
             android:name=".MainScreen"
             android:label="@string/title_activity_main_screen"
-            android:launchMode="singleInstance">
-        </activity>
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"></activity>
 
-        <service android:name=".SaveLocationOnDemand"/>
-        <service android:name=".SendMyTracking"/>
-        <service android:name=".DisableDriving"/>
-        <service android:name=".USSDService"
+        <service android:name=".SaveLocationOnDemand" />
+        <service android:name=".SendMyTracking" />
+        <service android:name=".DisableDriving" />
+        <service
+            android:name=".USSDService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
-            <action android:name="android.accessibilityservice.AccessibilityService" />
-        </intent-filter>
-            <meta-data android:name="android.accessibilityservice"
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
                 android:resource="@xml/ussd_service" />
         </service>
 
@@ -66,7 +71,7 @@
             android:name=".StartScreen$DeviceAdminM"
             android:description="@string/hello_blank_fragment"
             android:label="Device Lock Feature"
-            android:permission="android.permission.BIND_DEVICE_ADMIN" >
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
             <meta-data
                 android:name="android.app.device_admin"
                 android:resource="@xml/devadmin" />
@@ -86,8 +91,8 @@
         <activity
             android:name=".SendSMSAccident"
             android:label="@string/title_activity_send_smsaccident"
-            android:launchMode="singleInstance">
-        </activity>
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

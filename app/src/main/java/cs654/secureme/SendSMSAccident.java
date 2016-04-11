@@ -89,7 +89,7 @@ public class SendSMSAccident extends ActionBarActivity {
                     String message = "i'm in trouble, help me at " + addr + "(Lat= " + df.format(latitude) + " and Long= " + df.format(longitude) +")";
                     Toast.makeText(SendSMSAccident.this, message, Toast.LENGTH_LONG).show();
 
-//                    snd.sendSMSMessage(message, phoneNo);
+                    snd.sendSMSMessage(message, phoneNo);
 
                 }
 

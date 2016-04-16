@@ -74,8 +74,8 @@ public class SendMyTracking extends Service {
                     latitude = gps.getLatitude();
                     longitude = gps.getLongitude();
 
-                    longitude = longitude + tempTrack/100000;
-                    ++tempTrack;
+//                    longitude = longitude + tempTrack/100000;
+//                    ++tempTrack;
 
                     System.out.println("sunil sunil " + latitude + " " + longitude);
                     System.out.println("hi this is inside while loop for asynch " + url1);
